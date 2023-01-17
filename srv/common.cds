@@ -9,6 +9,11 @@ using riskmanagement as rm from '../db/schema';
  descr  @title : 'Description';
  miti   @title : 'Mitigation';
  impact @title : 'Impact';
+  //### BEGIN OF INSERT
+ bp @title : 'Business Partner';
+   //### END OF INSERT
+ criticality @title : 'Criticality';
+ 
  } 
 
 // Annotate Miti elements
@@ -20,6 +25,16 @@ using riskmanagement as rm from '../db/schema';
 owner @title : 'Owner';
 descr @title : 'Description';
  }
+  //### BEGIN OF INSERT
+ annotate rm.BusinessPartners with {
+   BusinessPartner @(
+     UI.Hidden,
+     Common : {Text : LastName}
+   );
+   LastName @title : 'Last Name';
+   FirstName @title : 'First Name';
+ }
+ //### END OF INSERT
 
 annotate rm.Risks with {
    miti @(Common : {
@@ -42,4 +57,29 @@ annotate rm.Risks with {
     ]
     }
   });
+  //### BEGIN OF INSERT
+ bp @(Common : {
+   Text : bp.LastName,
+   TextArrangement : #TextOnly,
+   ValueList : {
+      Label : 'Business Partners',
+      CollectionPath : 'BusinessPartners',
+      Parameters : [
+         {
+           $Type : 'Common.ValueListParameterInOut',
+           LocalDataProperty : bp_BusinessPartner,
+           ValueListProperty : 'BusinessPartner'
+         },
+         {
+            $Type : 'Common.ValueListParameterDisplayOnly',
+            ValueListProperty : 'LastName'
+          },
+          {
+             $Type : 'Common.ValueListParameterDisplayOnly',
+             ValueListProperty : 'FirstName'
+          }
+       ]
+     }
+  })
+//### END OF INSERT 
  }
